@@ -39,9 +39,17 @@ export default {
   methods: {
     // 提交登录
     handleLoginSubmit() {
-      this.$refs.form.vaildate(vaild=>{
-        if(vaild){
-          
+      this.$refs.form.validate(valid=>{
+        if(valid){
+          this.$axios({
+            url:'/accounts/login',
+            method:'post',
+            data:this.form
+          }).then(res=>{
+            if(res.status===200){
+              this.$message.success('登陆成功')
+            }
+          })
         }
       })
     }
