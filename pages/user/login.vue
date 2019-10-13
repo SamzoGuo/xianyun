@@ -29,7 +29,7 @@ import RegisterForm from "@/components/user/registerForm"
 export default {
   data() {
     return {
-      currentTab: 0
+      currentTab: 1
     };
   },
   methods: {
