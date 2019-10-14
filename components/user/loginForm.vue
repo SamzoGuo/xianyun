@@ -47,8 +47,6 @@ export default {
             if (res.status === 200) {
               this.$message.success("登陆成功");
               const data = res.data;
-              console.log(data);
-              
               // 把用户信息token保存到本地，在头部组件中显示用户数据
 
               // vuex不能通过直接赋值方式来修改state的值

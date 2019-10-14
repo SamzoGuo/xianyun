@@ -70,28 +70,42 @@ export default {
   methods: {
     // 发送验证码
     handleSendCaptcha() {
-      if(!this.form.username){
-        this.$message.error('手机号不能为空')
-        return
+      if (!this.form.username) {
+        this.$message.error("手机号不能为空");
+        return;
       }
       //请求手机验证码
       this.$axios({
-        url:'/captchas',
-        method:'post',
-        data:{
-          tel:this.form.username
+        url: "/captchas",
+        method: "post",
+        data: {
+          tel: this.form.username
         }
-      }).then(res=>{
-        console.log(res);
-        const data=res.data
-        this.$message.success(`验证码为:${data.code}`)
-      })
+      }).then(res => {
+        const data = res.data;
+        this.$message.success(`验证码为:${data.code}`);
+      });
     },
     // 注册
     handleRegSubmit() {
       this.$refs.form.validate(valid => {
-        if (vaild) {
+        if (valid) {
           // 请求注册的接口
+          const { checkPassword, ...props } = this.form;
+          this.$axios({
+            url: "/accounts/register",
+            method: "post",
+            data: props
+          }).then(res => {
+            if (res.status === 200) {
+              this.$message.success("注册成功");
+               // 跳转到首页
+              this.$router.push("/");
+              const data=res.data
+               // 把用户信息token保存到本地，在头部组件中显示用户数据
+              this.$store.commit("user/setUserInfo", data)
+            }
+          });
         }
       });
     }
