@@ -69,7 +69,24 @@ export default {
   },
   methods: {
     // 发送验证码
-    handleSendCaptcha() {},
+    handleSendCaptcha() {
+      if(!this.form.username){
+        this.$message.error('手机号不能为空')
+        return
+      }
+      //请求手机验证码
+      this.$axios({
+        url:'/captchas',
+        method:'post',
+        data:{
+          tel:this.form.username
+        }
+      }).then(res=>{
+        console.log(res);
+        const data=res.data
+        this.$message.success(`验证码为:${data.code}`)
+      })
+    },
     // 注册
     handleRegSubmit() {
       this.$refs.form.validate(valid => {
