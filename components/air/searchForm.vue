@@ -23,6 +23,7 @@
           @select="handleDepartSelect"
           class="el-autocomplete"
           v-model="form.departCity"
+          @blur="handleDepartBlur"
         ></el-autocomplete>
       </el-form-item>
 
@@ -61,6 +62,7 @@ export default {
         destCode: "", // 到达城市代码
         departDate: "" // 日期字符串
       },
+      cities: [],
       tabs: [
         { icon: "iconfont icondancheng", name: "单程" },
         { icon: "iconfont iconshuangxiang", name: "往返" }
@@ -78,21 +80,31 @@ export default {
     // 数组中的元素必须是一个对象，对象中必须要有value属性
     queryDepartSearch(value, cb) {
       // 输入框为空时候不请求
-      if (!value){
-          cb([])
-          return;
-      } 
+      if (!value) {
+        cb([]);
+        return;
+      }
       this.$axios({
         url: "/airs/city?name=" + value
       }).then(res => {
         const data = res.data.data;
         const newData = data.map(v => {
-          v.value = v.name.replace('市','');
+          v.value = v.name.replace("市", "");
           return v;
         });
+        //把newData赋值给data中的cities
+        this.cities = newData;
         // 展示到下拉列表
         cb(newData);
       });
+    },
+
+    //出发城市输入框失去焦点时默认选中第一个城市
+    handleDepartBlur() {
+      if (this.cities.length > 0) {
+        this.form.departCity = this.cities[0].value;
+        this.form.departCode = this.cities[0].sort;
+      }
     },
 
     // 目标城市输入框获得焦点时触发
@@ -103,14 +115,16 @@ export default {
 
     // 出发城市下拉选择时触发
     handleDepartSelect(item) {
-        this.form.departCity=item.value
-        this.form.departCode=item.sort
-        console.log(this.form);
-        
+      this.form.departCity = item.value;
+      this.form.departCode = item.sort;
     },
 
     // 目标城市下拉选择时触发
-    handleDestSelect(item) {},
+    handleDestSelect(item) {
+      this.form.destCity = item.value;
+      this.form.destCode = item.sort;
+      console.log(this.form);
+    },
 
     // 确认选择日期时触发
     handleDate(value) {},
