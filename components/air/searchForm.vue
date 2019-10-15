@@ -78,7 +78,10 @@ export default {
     // 数组中的元素必须是一个对象，对象中必须要有value属性
     queryDepartSearch(value, cb) {
       // 输入框为空时候不请求
-      if (!value) return;
+      if (!value){
+          cb([])
+          return;
+      } 
       this.$axios({
         url: "/airs/city?name=" + value
       }).then(res => {
@@ -99,7 +102,12 @@ export default {
     },
 
     // 出发城市下拉选择时触发
-    handleDepartSelect(item) {},
+    handleDepartSelect(item) {
+        this.form.departCity=item.value
+        this.form.departCode=item.sort
+        console.log(this.form);
+        
+    },
 
     // 目标城市下拉选择时触发
     handleDestSelect(item) {},
