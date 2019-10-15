@@ -23,7 +23,7 @@
           @select="handleDepartSelect"
           class="el-autocomplete"
           v-model="form.departCity"
-          @blur="handleDepartBlur"
+          @blur="handleBlur('depart')"
         ></el-autocomplete>
       </el-form-item>
 
@@ -33,6 +33,8 @@
           placeholder="请搜索到达城市"
           @select="handleDestSelect"
           class="el-autocomplete"
+          v-model="form.destCity"
+          @blur="handleBlur('dest')"
         ></el-autocomplete>
       </el-form-item>
 
@@ -100,17 +102,27 @@ export default {
     },
 
     //出发城市输入框失去焦点时默认选中第一个城市
-    handleDepartBlur() {
-      if (this.cities.length > 0) {
-        this.form.departCity = this.cities[0].value;
-        this.form.departCode = this.cities[0].sort;
-      }
+    handleBlur(type) {
+      //   if (this.cities.length > 0) {
+      //     if (type === "depart") {
+      //       this.form.departCity = this.cities[0].value;
+      //       this.form.departCode = this.cities[0].sort;
+      //     }
+      //     if (type === "dest") {
+      //       this.form.destCity = this.cities[0].value;
+      //       this.form.destCode = this.cities[0].sort;
+      //     }
+      //   }
+
+      if (this.cities.length === 0) return;
+      this.form[type+'City'] = this.cities[0].value;
+      this.form[type+'Code'] = this.cities[0].sort;
     },
 
     // 目标城市输入框获得焦点时触发
     // value 是选中的值，cb是回调函数，接收要展示的列表
     queryDestSearch(value, cb) {
-      cb([{ value: 1 }, { value: 2 }, { value: 3 }]);
+      this.queryDepartSearch(value, cb);
     },
 
     // 出发城市下拉选择时触发
@@ -123,7 +135,6 @@ export default {
     handleDestSelect(item) {
       this.form.destCity = item.value;
       this.form.destCode = item.sort;
-      console.log(this.form);
     },
 
     // 确认选择日期时触发
