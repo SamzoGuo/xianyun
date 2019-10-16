@@ -11,7 +11,10 @@
 
         <!-- 航班信息 -->
         <FlightsItem v-for="(item,index) in dataList" :key="index" :item="item" />
+        <div style="padding:30px;text-align:center"
+        v-if="flightsData.flights.length===0&&!loading">该航班暂无数据</div>
         <el-pagination
+          v-if="flightsData.flights.length"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="pageIndex"
@@ -43,7 +46,9 @@ export default {
       //当前页数
       pageIndex: 1,
       //当前条数
-      pageSize: 5
+      pageSize: 5,
+      //判断是否加载完成
+      loading: true
     };
   },
   components: {
@@ -61,6 +66,8 @@ export default {
     }).then(res => {
       // 保存到机票的总数据
       this.flightsData = res.data;
+      // 请求完毕
+      this.loading = false;
     });
   },
   methods: {
