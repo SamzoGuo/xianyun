@@ -24,7 +24,7 @@
         </el-col>
         <el-col :span="6" class="flight-info-right">
           ￥
-          <span class="sell-price">{{item.base_price}}</span>起
+          <span class="sell-price">{{item.base_price/2}}</span>起
         </el-col>
       </el-row>
     </div>
