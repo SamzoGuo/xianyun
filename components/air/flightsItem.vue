@@ -4,7 +4,8 @@
       <!-- 显示的机票信息 -->
       <el-row type="flex" align="middle" class="flight-info">
         <el-col :span="6">
-          <span>{{item.airline_name}}</span>{{item.flight_no}}
+          <span>{{item.airline_name}}</span>
+          {{item.flight_no}}
         </el-col>
         <el-col :span="12">
           <el-row type="flex" justify="space-between" class="flight-info-center">
@@ -13,7 +14,7 @@
               <span>{{item.org_airport_name}}{{item.org_airport_quay}}</span>
             </el-col>
             <el-col :span="8" class="flight-time">
-              <span>2时20分</span>
+              <span>{{ranktime}}</span>
             </el-col>
             <el-col :span="8" class="flight-airport">
               <strong>{{item.arr_time}}</strong>
@@ -33,9 +34,17 @@
         <el-col :span="4">低价推荐</el-col>
         <el-col :span="20">
           <!-- 需要循环显示的座位信息 -->
-          <el-row type="flex" justify="space-between" align="middle" class="flight-sell" v-for="(item,index) in item.seat_infos" :key="index">
+          <el-row
+            type="flex"
+            justify="space-between"
+            align="middle"
+            class="flight-sell"
+            v-for="(item,index) in item.seat_infos"
+            :key="index"
+          >
             <el-col :span="16" class="flight-sell-left">
-              <span>{{item.name}}</span> | {{item.supplierName}}
+              <span>{{item.name}}</span>
+              | {{item.supplierName}}
             </el-col>
             <el-col :span="5" class="price">￥{{item.par_price}}</el-col>
             <el-col :span="3" class="choose-button">
@@ -58,6 +67,22 @@ export default {
       type: Object,
       // 如果用户不传，采取默认值!!!!
       default: {}
+    }
+  },
+  computed: {
+    ranktime() {
+      const arrTime = this.item.arr_time.split(":");
+      const depTime = this.item.dep_time.split(":");
+      if (arrTime[0] < depTime[0]) {
+        arrTime[0] = Number(arrTime[0]) + 24;
+      }
+      const end = arrTime[0] * 60 + +arrTime[1];
+      const start = depTime[0] * 60 + +depTime[1];
+      const dis = end - start;
+      const HH = Math.floor(dis / 60);
+      const mm = dis % 60;
+
+      return HH + "小时" + mm + "分钟";
     }
   }
 };
