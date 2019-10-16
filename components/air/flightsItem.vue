@@ -1,8 +1,8 @@
 <template>
   <div class="flight-item">
-    <div>
+    <div  @click="isShow=!isShow">
       <!-- 显示的机票信息 -->
-      <el-row type="flex" align="middle" class="flight-info">
+      <el-row type="flex" align="middle" class="flight-info" >
         <el-col :span="6">
           <span>{{item.airline_name}}</span>
           {{item.flight_no}}
@@ -28,7 +28,7 @@
         </el-col>
       </el-row>
     </div>
-    <div class="flight-recommend">
+    <div class="flight-recommend" v-if="isShow">
       <!-- 隐藏的座位信息列表 -->
       <el-row type="flex" justify="space-between" align="middle">
         <el-col :span="4">低价推荐</el-col>
@@ -60,6 +60,11 @@
 
 <script>
 export default {
+     data(){
+      return {
+          isShow:false
+      }
+  },
   // props除了可以使用数组之外，还可以使用对象
   props: {
     // item是声明组件可以接受item属性
