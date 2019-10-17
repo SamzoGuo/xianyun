@@ -90,16 +90,16 @@ export default {
 
     // 选择出发时间时候触发
     handleFlightTimes(value) {
-        //根据value过滤列表，只保留当前符合条件的机票列表
-        //  数组中第一项是开始时间，第二项是终止时间
-        const arr1=value.split(',') // [6, 12]
-        const arr2=this.data.flights.filter(v=>{
-            // 出发时间的小时
-            const start=+v.dep_time.split(':')[0]
-            // 比较航班出发时间是否在选中的时间段内
-            return start>=arr1[0]&&start<arr1[1]
-        })
-       this.$emit("setDataList",arr2);
+      //根据value过滤列表，只保留当前符合条件的机票列表
+      //  数组中第一项是开始时间，第二项是终止时间
+      const arr1 = value.split(","); // [6, 12]
+      const arr2 = this.data.flights.filter(v => {
+        // 出发时间的小时
+        const start = +v.dep_time.split(":")[0];
+        // 比较航班出发时间是否在选中的时间段内
+        return start >= arr1[0] && start < arr1[1];
+      });
+      this.$emit("setDataList", arr2);
     },
 
     // 选择航空公司时候触发
@@ -112,10 +112,23 @@ export default {
     },
 
     // 选择机型时候触发
-    handleAirSize(value) {},
+    handleAirSize(value) {
+      // 根据value过滤列表，只保留当前符合条件的机票列表
+      const arr = this.data.flights.filter(v => {
+        return v.plane_size === value;
+      });
+      this.$emit("setDataList", arr);
+    },
 
     // 撤销条件时候触发
-    handleFiltersCancel() {}
+    handleFiltersCancel() {
+      this.airport = ""; // 机场
+      this.flightTimes = ""; // 出发时间
+      this.company = ""; // 航空公司
+      this.airSize = ""; // 机型大小
+      // 传递没有修改的列表数据
+      this.$emit("setDataList", this.data.flights);
+    }
   }
 };
 </script>
