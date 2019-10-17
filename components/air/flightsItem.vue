@@ -39,17 +39,19 @@
             justify="space-between"
             align="middle"
             class="flight-sell"
-            v-for="(item,index) in item.seat_infos"
+            v-for="(seat,index) in item.seat_infos"
             :key="index"
           >
             <el-col :span="16" class="flight-sell-left">
-              <span>{{item.name}}</span>
-              | {{item.supplierName}}
+              <span>{{seat.name}}</span>
+              | {{seat.supplierName}}
             </el-col>
-            <el-col :span="5" class="price">￥{{item.par_price}}</el-col>
+            <el-col :span="5" class="price">￥{{seat.par_price}}</el-col>
             <el-col :span="3" class="choose-button">
-              <el-button type="warning" size="mini">选定</el-button>
-              <p>剩余：{{item.discount}}</p>
+              <nuxt-link :to="`/air/order?id=${item.id}&seat_xid=${seat.seat_xid}`">
+                <el-button type="warning" size="mini">选定</el-button>
+              </nuxt-link>
+              <p>剩余：{{seat.discount}}</p>
             </el-col>
           </el-row>
         </el-col>
