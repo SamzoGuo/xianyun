@@ -23,7 +23,7 @@
           :page-sizes="[5, 10, 15]"
           :page-size="pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="flightsData.flights.length"
+          :total="total"
         ></el-pagination>
       </div>
       <!-- 侧边栏 -->
@@ -61,7 +61,9 @@ export default {
       //当前条数
       pageSize: 5,
       //判断是否加载完成
-      loading: true
+      loading: true,
+      // 分页条数
+      total: 0
     };
   },
   components: {
@@ -85,6 +87,8 @@ export default {
       this.cacheFlightsData = { ...res.data };
       // 请求完毕
       this.loading = false;
+      // 分页总数
+      this.total = this.flightsData.total;
     });
   },
   methods: {
@@ -99,6 +103,9 @@ export default {
     //给过滤组件修改flightsData中的flights
     setDataList(arr) {
       this.flightsData.flights = arr;
+      //修改分页的初始值
+      this.total=arr.length
+      this.pageIndex=1
     }
   },
   computed: {
