@@ -191,7 +191,9 @@ export default {
       this.$router.push({
         path: "/air/flights",
         query: this.form
-      });
+      })
+      //搜索表单的对象this.form保存到store
+      this.$store.commit()
     }
   },
   mounted() {}
