@@ -44,7 +44,8 @@ export default {
       flightsData: {
         //初始值
         flights: [],
-        info:{}
+        info:{},
+        options:{}
       },
       //当前页数
       pageIndex: 1,
