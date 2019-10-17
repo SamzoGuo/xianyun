@@ -193,7 +193,7 @@ export default {
         query: this.form
       })
       //搜索表单的对象this.form保存到store
-      this.$store.commit('air/setHostory',this.form)
+      this.$store.commit('air/setHistory',this.form)
     }
   },
   mounted() {}
