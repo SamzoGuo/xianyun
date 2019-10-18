@@ -2,7 +2,6 @@
   <div class="container">
     <el-row type="flex" justify="space-between">
       <!-- 订单表单 -->
-      <div class="main"></div>
         <OrderForm/>
       <!-- 侧边栏 -->
       <div class="aside"></div>
