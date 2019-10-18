@@ -65,6 +65,8 @@
         <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
       </div>
     </div>
+       <!--  调用总价格，让computed执行 -->
+    <span v-show="false">{{allPrice}}</span>
   </div>
 </template>
 
@@ -126,6 +128,7 @@ export default {
         seat_xid: this.$route.query.seat_xid,
         air: Number(this.$route.query.id)
       };
+      // 提交订单
       this.$axios({
         url: "/airorders",
         method: "post",
@@ -161,6 +164,14 @@ export default {
       //把机票详情传给父组件
       this.$emit("getDetail", this.detail);
     });
+  },
+  computed:{
+      //监听、计算总价格
+      allPrice(){
+          //把总计各返回给父组件
+          this.$emit('getAllPrice',1000)
+          return 2
+      }
   }
 };
 </script>
