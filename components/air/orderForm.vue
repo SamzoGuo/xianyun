@@ -47,11 +47,11 @@
       <div class="contact">
         <el-form label-width="60px">
           <el-form-item label="姓名">
-            <el-input></el-input>
+            <el-input v-model="contactName"></el-input>
           </el-form-item>
 
           <el-form-item label="手机">
-            <el-input placeholder="请输入内容">
+            <el-input placeholder="请输入内容" v-model="contactPhone">
               <template slot="append">
                 <el-button @click="handleSendCaptcha">发送验证码</el-button>
               </template>
@@ -59,7 +59,7 @@
           </el-form-item>
 
           <el-form-item label="验证码">
-            <el-input></el-input>
+            <el-input v-model="captcha"></el-input>
           </el-form-item>
         </el-form>
         <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
@@ -76,6 +76,10 @@ export default {
       users: [{ username: "", id: "" }],
       //保险的集合
       insurances: [],
+      contactName: "", //联系人名字
+      contactPhone: "", //联系人电话
+      captcha: "", //验证码
+      invoice: false, //发票，写死
       //保存机票详情信息
       detail: {}
     };
@@ -92,10 +96,33 @@ export default {
     },
 
     // 发送手机验证码
-    handleSendCaptcha() {},
-
+    handleSendCaptcha() {
+      //请求手机验证码
+      this.$axios({
+        url: "/captchas",
+        method: "post",
+        data: {
+          tel: this.contactPhone
+        }
+      }).then(res => {
+        const data = res.data;
+        this.$message.success(`验证码为:${data.code}`);
+      });
+    },
     // 提交订单
-    handleSubmit() {},
+    handleSubmit() {
+        //提交订单的参数
+        const data={
+            users:this.users,
+            insurances:this.insurances,
+            contactName:this.contactName,
+            contactPhone:this.contactPhone,
+            invoice:this.invoice,
+            seat_xid:this.$route.query.seat_xid,
+            air:Number(this.$route.query.id)
+        }
+        console.log(data);
+    },
 
     //选择保险时触发，id是保险的ID
     handleChange(id) {
