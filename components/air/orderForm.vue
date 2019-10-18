@@ -32,8 +32,12 @@
     <div class="air-column">
       <h2>保险</h2>
       <div>
-        <div class="insurance-item">
-          <el-checkbox label="航空意外险：￥30/份×1  最高赔付260万" border></el-checkbox>
+        <div class="insurance-item" v-for="(item,index) in detail.insurances" :key="index">
+          <el-checkbox
+            :label="`${item.type}：￥${item.price}/份×1  最高赔付${item.compensation}万`"
+            border
+            @change="handleChange(item.id)"
+          ></el-checkbox>
         </div>
       </div>
     </div>
@@ -68,35 +72,53 @@
 export default {
   data() {
     return {
-      users: [{ username: "", id: "" }]
+      //乘机人姓名和id
+      users: [{ username: "", id: "" }],
+      //保险的集合
+      insurances: [],
+      //保存机票详情信息
+      detail: {}
     };
   },
   methods: {
     // 添加乘机人
     handleAddUsers() {
-        this.users.push({username:'',id:''})
+      this.users.push({ username: "", id: "" });
     },
 
     // 移除乘机人
     handleDeleteUser(index) {
-        this.users.splice(index,1)
+      this.users.splice(index, 1);
     },
 
     // 发送手机验证码
     handleSendCaptcha() {},
 
     // 提交订单
-    handleSubmit() {}
+    handleSubmit() {},
+
+    //选择保险时触发，id是保险的ID
+    handleChange(id) {
+      //判断保险ID集合中是否存在，不存在就添加，存在就移除
+      const index = this.insurances.indexOf(id);
+      if (index === -1) {
+        this.insurances.push(id);
+      } else {
+        this.insurances.splice(index, 1);
+      }
+    }
   },
-  mounted(){
-      const {id,seat_xid}=this.$route.query
-      //请求机票详情
-      this.$axios({
-          url:'/airs/'+id,
-          params:{seat_xid}
-      }).then(res=>{
-          console.log(res);
-      })
+  mounted() {
+    const { id, seat_xid } = this.$route.query;
+    //请求机票详情
+    this.$axios({
+      url: "/airs/" + id,
+      params: { seat_xid }
+    }).then(res => {
+      //保存机票详情到data中
+      this.detail = res.data;
+      console.log(this.detail);
+    });
   }
 };
 </script>
