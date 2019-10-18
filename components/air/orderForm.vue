@@ -65,7 +65,7 @@
         <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
       </div>
     </div>
-       <!--  调用总价格，让computed执行 -->
+    <!--  调用总价格，让computed执行 -->
     <span v-show="false">{{allPrice}}</span>
   </div>
 </template>
@@ -137,7 +137,14 @@ export default {
           Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
         }
       }).then(res => {
-        console.log(res);
+        const { data, message } = res.data;
+        //跳转到付款页 /air/pay?id=505
+        this.$router.push({
+          path: "/air/pay",
+          query: {
+              id:data.id
+          }
+        });
       });
     },
 
@@ -165,13 +172,26 @@ export default {
       this.$emit("getDetail", this.detail);
     });
   },
-  computed:{
-      //监听、计算总价格
-      allPrice(){
-          //把总计各返回给父组件
-          this.$emit('getAllPrice',1000)
-          return 2
-      }
+  computed: {
+    //监听、计算总价格
+    allPrice() {
+      // 如果接口还没请求回来，直接返回
+      if (!this.detail.seat_infos) return;
+
+      //总价格初始值
+      let price = 0;
+      //机票单价
+      (price += this.detail.seat_infos.org_settle_price),
+        //燃油价格
+        (price += this.detail.airport_tax_audlet);
+      //保险费
+      price += this.insurances.length * 30;
+      //人数
+      price *= this.users.length;
+      //把总计各返回给父组件
+      this.$emit("getAllPrice", price);
+      return 2;
+    }
   }
 };
 </script>
