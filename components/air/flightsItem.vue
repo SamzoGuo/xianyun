@@ -58,10 +58,11 @@
       </el-row>
     </div>
   </div>
-  
 </template>
 
 <script>
+// 导入计算的方法
+import { computeTime } from "@/utils/utils";
 export default {
   data() {
     return {
@@ -79,18 +80,7 @@ export default {
   },
   computed: {
     ranktime() {
-      const arrTime = this.item.arr_time.split(":");
-      const depTime = this.item.dep_time.split(":");
-      if (arrTime[0] < depTime[0]) {
-        arrTime[0] = Number(arrTime[0]) + 24;
-      }
-      const end = arrTime[0] * 60 + +arrTime[1];
-      const start = depTime[0] * 60 + +depTime[1];
-      const dis = end - start;
-      const HH = Math.floor(dis / 60);
-      const mm = dis % 60;
-
-      return HH + "小时" + mm + "分钟";
+      return computeTime(this.item.arr_time, this.item.dep_time);
     }
   }
 };

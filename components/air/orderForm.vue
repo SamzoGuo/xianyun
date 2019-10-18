@@ -98,6 +98,10 @@ export default {
     // 发送手机验证码
     handleSendCaptcha() {
       //请求手机验证码
+      if (!/^1[3456789]\d{9}$/.test(this.contactPhone)) {
+        this.$message.error("请输入合法的手机号");
+        return;
+      }
       this.$axios({
         url: "/captchas",
         method: "post",
@@ -111,17 +115,27 @@ export default {
     },
     // 提交订单
     handleSubmit() {
-        //提交订单的参数
-        const data={
-            users:this.users,
-            insurances:this.insurances,
-            contactName:this.contactName,
-            contactPhone:this.contactPhone,
-            invoice:this.invoice,
-            seat_xid:this.$route.query.seat_xid,
-            air:Number(this.$route.query.id)
+      //提交订单的参数
+      const data = {
+        users: this.users,
+        insurances: this.insurances,
+        contactName: this.contactName,
+        contactPhone: this.contactPhone,
+        invoice: this.invoice,
+        captcha: this.captcha,
+        seat_xid: this.$route.query.seat_xid,
+        air: Number(this.$route.query.id)
+      };
+      this.$axios({
+        url: "/airorders",
+        method: "post",
+        data,
+        headers: {
+          Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
         }
-        console.log(data);
+      }).then(res => {
+        console.log(res);
+      });
     },
 
     //选择保险时触发，id是保险的ID
@@ -144,7 +158,8 @@ export default {
     }).then(res => {
       //保存机票详情到data中
       this.detail = res.data;
-      console.log(this.detail);
+      //把机票详情传给父组件
+      this.$emit("getDetail", this.detail);
     });
   }
 };
