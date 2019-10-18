@@ -54,6 +54,7 @@ export default {
               // 通过调用mutation下的方法掉修改state的值,commit方法调用mutation的方法
               // 非常类似于$emit
               this.$store.commit("user/setUserInfo", data)
+              this.$router.push('/')
             }
           });
         }
