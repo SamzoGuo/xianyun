@@ -13,7 +13,7 @@ export default (context) => {
         if(statusCode === 400){
             Message.error(message)
         }
-        if(statusCode === 403){
+        if(statusCode === 403||statusCode === 401){
              // 路由重定向的方法
              Message.error('请登录账号')
              context.redirect('/user/login')

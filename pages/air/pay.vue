@@ -3,7 +3,7 @@
     <div class="main">
       <div class="pay-title">
         支付总金额
-        <span class="pay-price">￥ 1000</span>
+        <span class="pay-price">￥ {{order.price}}</span>
       </div>
       <div class="pay-main">
         <h4>微信支付</h4>
@@ -33,16 +33,16 @@ export default {
   mounted() {
     //通过订单id获取订单详情
     const { id } = this.$route.query;
-    console.log(id);
-    this.$axios({
-      url: `/airorders/` + id,
-      headers: {
-        Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
-      }.then(res => {
+    setTimeout(() => {
+      this.$axios({
+        url: `/airorders/` + id,
+        headers: {
+          Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
+        }
+      }).then(res => {
         this.order = res.data;
-        console.log(res);
-      })
-    });
+      });
+    }, 10);
   }
 };
 </script>
