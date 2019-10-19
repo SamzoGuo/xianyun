@@ -24,6 +24,8 @@
 </template>
 
 <script>
+//引入生成二维码的包
+import QRcode from 'qrcode'
 export default {
   data() {
     return {
@@ -41,6 +43,11 @@ export default {
         }
       }).then(res => {
         this.order = res.data;
+        //生成二维码
+        //查找存放二维码的元素
+        const qrcode=document.querySelector('#qrcode-stage')
+        //二维码生成的方法 第一个参数是元素  第二个是二维码链接
+        QRcode.toCanvas(qrcode,this.order.payInfo.code_url)
       });
     }, 10);
   }
