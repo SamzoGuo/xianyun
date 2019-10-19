@@ -25,7 +25,7 @@
 
 <script>
 //引入生成二维码的包
-import QRcode from 'qrcode'
+import QRcode from "qrcode";
 export default {
   data() {
     return {
@@ -45,9 +45,30 @@ export default {
         this.order = res.data;
         //生成二维码
         //查找存放二维码的元素
-        const qrcode=document.querySelector('#qrcode-stage')
-        //二维码生成的方法 第一个参数是元素  第二个是二维码链接
-        QRcode.toCanvas(qrcode,this.order.payInfo.code_url)
+        const qrcode = document.querySelector("#qrcode-stage");
+        //二维码生成的方法 第一个参数是元素  第二个是生成二维码链接
+        QRcode.toCanvas(qrcode, this.order.payInfo.code_url);
+        //轮询状态
+        const timer=setInterval(() => {
+          this.$axios({
+            url: "/airorders/checkpay",
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
+            },
+            data: {
+              id: this.$route.query.id,
+              nonce_str: this.order.price,
+              out_trade_no: this.order.orderNo
+            }
+          }).then(res => {
+           const {statusTxt}=res.data
+           if(statusTxt=='支付完成'){
+             this.$message.success(statusTxt)
+             clearInterval(timer)
+           }
+          });
+        },3000);
       });
     }, 10);
   }
